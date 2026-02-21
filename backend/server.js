@@ -13,31 +13,35 @@ const LOCATION = "us"; // usually us
 const PROCESSOR_ID = "e8e47ed785fa3c12";
 
 const client = new DocumentProcessorServiceClient({
-  keyFilename: "service-account.json",
+  keyFilename: "ocr-service.json",
 });
 
 app.post("/ocr", upload.single("image"), async (req, res) => {
-  try {
-    const name = `projects/${PROJECT_ID}/locations/${LOCATION}/processors/${PROCESSOR_ID}`;
-
-    const request = {
-      name,
-      rawDocument: {
-        content: req.file.buffer,
-        mimeType: "image/jpeg",
-      },
-    };
-
-    const [result] = await client.processDocument(request);
-    const text = result.document.text;
-
-    res.json({ text });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("OCR failed");
-  }
+    try {
+        // 🔹 Add these debug logs
+    
+        const name = `projects/${PROJECT_ID}/locations/${LOCATION}/processors/${PROCESSOR_ID}`;
+    
+        const request = {
+          name,
+          rawDocument: {
+            content: req.file.buffer,
+            mimeType: "image/jpeg", // or "image/png" if your file is PNG
+          },
+        };
+    
+        const [result] = await client.processDocument(request);
+        const text = result.document.text;
+    
+        console.log("OCR success:", text);  // logs the extracted text
+        res.json({ text });
+      } catch (err) {
+        console.error("OCR error:", err);  // logs detailed errors
+        res.status(500).send("OCR failed");
+      }
 });
 
-app.listen(3001, () => {
-  console.log("🚀 OCR server running on port 3001");
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 OCR server running on port ${PORT}`);
 });
