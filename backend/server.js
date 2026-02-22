@@ -8,6 +8,31 @@ app.use(cors());
 
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Temporary hardcoded user profiles for development/testing.
+// These will be replaced by real user-provided profiles later.
+const TEMP_USER_PROFILES = [
+  {
+    user_id: 'test_user_1',
+    skin_type: 'sensitive',
+    concerns: ['acne', 'redness'],
+    allergies: ['fragrance'],
+    pregnant: false,
+    medications: ['topical_retinoid'],
+    age_range: '25-34',
+    preferred_avoid: ['alcohol']
+  },
+  {
+    user_id: 'test_user_2',
+    skin_type: 'oily',
+    concerns: ['oiliness', 'large_pores'],
+    allergies: [],
+    pregnant: null,
+    medications: [],
+    age_range: '18-24',
+    preferred_avoid: []
+  }
+];
+
 const PROJECT_ID = "skincare-checker-new";
 const LOCATION = "us"; // usually us
 const PROCESSOR_ID = "e8e47ed785fa3c12";
